@@ -8,6 +8,14 @@ FETCH_URL = "https://poloniex.com/public?command=returnChartData&currencyPair=%s
 #PAIR_LIST = ["BTC_ETH"]
 DATA_DIR = "data"
 COLUMNS = ["date","high","low","open","close","volume","quoteVolume","weightedAverage"]
+CANDLESTICK_DICT = {
+    '1': 300,
+    '2': 900,
+    '3': 1800,
+    '4': 7200,
+    '5': 14400,
+    '6': 86400,
+}
 
 def get_data(pair, start_time, end_time, candle):
 
@@ -46,13 +54,14 @@ def main():
     end_time = timestamp.dateToTimestampEnd()
     print("Valores do Candlestick")
     print("""
-    5 min = 300 
-    15 min = 900  
-    30 min = 1800  
-    2 hr = 7200
-    4 hr = 14400  
-    1 dia = 86400""")
-    candle = input("Candlestick: ")
+    1 - 5 min
+    2 - 15 min  
+    3 - 30  
+    4 - 2 hr
+    5 - 4 hr  
+    6 - 1 dia""")
+    option = input("Candlestick: ")
+    candle = CANDLESTICK_DICT.get(str(option))
     if os.path.exists(DATA_DIR):
         shutil.rmtree(DATA_DIR)
 
