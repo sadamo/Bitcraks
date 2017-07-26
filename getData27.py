@@ -6,7 +6,7 @@ import pandas as pd
 from indicadores import (computeMACD, ExpMovingAverage)
 
 FETCH_URL = "https://poloniex.com/public?command=returnChartData&currencyPair=%s&start=%d&end=%d&period=%d"
-#PAIR_LIST = ["BTC_ETH"]
+# PAIR_LIST = ["BTC_ETH"]
 DATA_DIR = "data"
 COLUMNS = ["date", "high", "low", "open", "close", "volume", "quoteVolume",
            "weightedAverage",
@@ -21,9 +21,9 @@ CANDLESTICK_DICT = {
     '6': 86400,
 }
 
-def get_data(pair, start_time, end_time, candle):
 
-    datafile = os.path.join(DATA_DIR, pair+".csv")
+def get_data(pair, start_time, end_time, candle):
+    datafile = os.path.join(DATA_DIR, pair + ".csv")
     timefile = os.path.join(DATA_DIR, pair)
 
     newfile = True
@@ -32,7 +32,7 @@ def get_data(pair, start_time, end_time, candle):
 
     df = pd.read_json(url)
 
-    #import pdb;pdb.set_trace()
+    # import pdb;pdb.set_trace()
 
     if df["date"].iloc[-1] == 0:
         print("No data.")
@@ -50,7 +50,7 @@ def get_data(pair, start_time, end_time, candle):
     df['Histogram'] = histogram
 
     end_time = df["date"].iloc[-1]
-    ft = open(timefile,"w")
+    ft = open(timefile, "w")
     ft.write("%s\n" % end_time)
     ft.close()
     outf = open(datafile, "a")
@@ -64,7 +64,6 @@ def get_data(pair, start_time, end_time, candle):
 
 
 def main():
-
     start_time = timestamp.dateToTimestampStart()
     end_time = timestamp.dateToTimestampEnd()
     print("Valores do Candlestick")
@@ -86,6 +85,7 @@ def main():
     print(pair)
     get_data(pair, start_time, end_time, candle)
     time.sleep(6)
+
 
 if __name__ == '__main__':
     main()
