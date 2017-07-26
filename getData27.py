@@ -3,11 +3,15 @@ import time
 import timestamp
 import shutil
 import pandas as pd
+from indicadores import (computeMACD, ExpMovingAverage)
 
 FETCH_URL = "https://poloniex.com/public?command=returnChartData&currencyPair=%s&start=%d&end=%d&period=%d"
 #PAIR_LIST = ["BTC_ETH"]
 DATA_DIR = "data"
-COLUMNS = ["date","high","low","open","close","volume","quoteVolume","weightedAverage"]
+COLUMNS = ["date", "high", "low", "open", "close", "volume", "quoteVolume",
+           "weightedAverage",
+           "EmaSlow", "EmaFast", "MACD", "Signal", "Histogram"]
+
 CANDLESTICK_DICT = {
     '1': 300,
     '2': 900,
@@ -33,6 +37,17 @@ def get_data(pair, start_time, end_time, candle):
     if df["date"].iloc[-1] == 0:
         print("No data.")
         return
+
+    emaslow, emafast, macd = computeMACD(df['close'])
+    signal = ExpMovingAverage(macd, 9)
+
+    histogram = macd - signal
+
+    df['EmaSlow'] = emaslow
+    df['EmaFast'] = emafast
+    df['MACD'] = macd
+    df['Signal'] = signal
+    df['Histogram'] = histogram
 
     end_time = df["date"].iloc[-1]
     ft = open(timefile,"w")
